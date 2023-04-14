@@ -40,9 +40,8 @@ def get_occurrences(pattern, text):
     hashPattern = 0
     hashWindow = 0
     hash_val = 1
+    hash_val = pow(d, patternLength - 1, q)
     foundIndex = []
-    for i in range(patternLength - 1):
-        hash_val = (hash_val*d) % q
     # jāaprēķina hash vērtību patternam un tāda paša garuma pirmajam logam no text
     for i in range(patternLength):
         hashPattern = (d*hashPattern + ord(pattern[i])) % q
@@ -50,14 +49,15 @@ def get_occurrences(pattern, text):
     # salīdzināt pattern un tekošā loga hash vērtības, ja tās sakrīt, salīdzināt katru simbolu uz sakritību
     for i in range(textLength - patternLength + 1):
         if hashPattern == hashWindow:
-            # simbolu salīdzināšana,  ja simboli sakrīt palielināt j
+            # simbolu salīdzināšana,  ja simboli sakrīt palielināt count, kam jābūt pattern garumā, ja visi simboli sakrīt
+            count = 0
             for j in range(patternLength):
                 if text[i+j] == pattern[j]:
-                    j = j + 1
+                  count = count + 1
                 else:
                     break
             # salīdzina ar patternLength, ja sakrīt tātad atrasts pattern tekstā indeksā i
-            if j == patternLength:
+            if count == patternLength:
                 foundIndex.append(i)
 
         # ja pattern nav atrasts pārvietot logu tālāk, aprēķināt jauno hash vērtību un veikt tās pašas darbības
@@ -69,6 +69,7 @@ def get_occurrences(pattern, text):
                      
 
     # and return an iterable variable
+    # atgriež listu ar indeksiem, kur sakrīt pattern
     return foundIndex
 
 
