@@ -1,8 +1,6 @@
 # python3
 
 def read_input():
-    # this function needs to aquire input both from keyboard and file
-    # as before, use capital i (input from keyboard) and capital f (input from file) to choose which input type will follow
     # ievade no tastatūras un viena faila
     letter = input()
     if "I" in letter:
@@ -16,17 +14,6 @@ def read_input():
         return (pattern.rstrip(), text.rstrip())
 
 
-    
-    # after input type choice
-    # read two lines 
-    # first line is pattern 
-    # second line is text in which to look for pattern 
-
-    # return both lines in one return
-
-    # this is the sample return, notice the rstrip function
-    # return (input().rstrip(), input().rstrip())
-
 def print_occurrences(output):
     # this function should control output, it doesn't need any return
     print(' '.join(map(str, output)))
@@ -37,10 +24,11 @@ def get_occurrences(pattern, text):
     q = 100000001
     patternLength = len(pattern)
     textLength = len(text)
+    if (patternLength + textLength) > 10**8:
+        quit()
     hashPattern = 0
     hashWindow = 0
     hash_val = 1
-    hash_val = pow(d, patternLength - 1, q)
     foundIndex = []
     # jāaprēķina hash vērtību patternam un tāda paša garuma pirmajam logam no text
     for i in range(patternLength):
@@ -62,7 +50,7 @@ def get_occurrences(pattern, text):
 
         # ja pattern nav atrasts pārvietot logu tālāk, aprēķināt jauno hash vērtību un veikt tās pašas darbības
         if i < textLength - patternLength:
-            hashWindow = (d * (hashWindow - ord(text[i]) * hash_val) + ord(text[i+patternLength])) % q
+            hashWindow = (d * (hashWindow - ord(text[i]) * pow(d, patternLength - 1, q)) + ord(text[i+patternLength])) % q
             # ir jāapstrādā negatīvi skaitļi
             if hashWindow < 0:
                 hashWindow = hashWindow + q
